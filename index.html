@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مواقيت الأذان</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- font  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- font -->
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="img/download.png" />
+    <!-- favicon -->
+  </head>
+  <body>
+    <div style="direction: rtl; height: 100vh; padding-bottom: 250px">
+      <!-- city name and date -->
+      <div style="margin-top: 100px">
+        <div style="color: white; margin-right: 40px">
+          <h1 id="cityName">الرياض</h1>
+          <h6 style="font-size: 40px; font-weight: 200" id="date"></h6>
+        </div>
+
+        <hr style="margin: 0px 50px; border-color: #5200e15c" />
+      </div>
+      <!-- city name and date -->
+
+      <!-- prayer times -->
+      <div
+        style="height: 250px; margin-top: 80px; justify-content: space-around"
+        class="center"
+      >
+        <!-- card -->
+        <div class="card">
+          <div class="card-header">
+            <h1>الفجر</h1>
+          </div>
+          <div class="card-body center" style="height: 80%">
+            <h1 class="time" id="fajr-time">5.20</h1>
+          </div>
+        </div>
+        <!-- card -->
+        <!-- card -->
+        <div class="card">
+          <div class="card-header">
+            <h1>الشروق</h1>
+          </div>
+          <div class="card-body center" style="height: 80%">
+            <h1 class="time" id="sunRise-time">5.20</h1>
+          </div>
+        </div>
+        <!-- card -->
+        <!-- card -->
+        <div class="card">
+          <div class="card-header">
+            <h1>الظهر</h1>
+          </div>
+          <div class="card-body center" style="height: 80%">
+            <h1 class="time" id="dhur-time">5.20</h1>
+          </div>
+        </div>
+        <!-- card -->
+        <!-- card -->
+        <div class="card">
+          <div class="card-header">
+            <h1>العصر</h1>
+          </div>
+          <div class="card-body center" style="height: 80%">
+            <h1 class="time" id="asr-time">5.20</h1>
+          </div>
+        </div>
+        <!-- card -->
+        <!-- card -->
+        <div class="card">
+          <div class="card-header">
+            <h1>المغرب</h1>
+          </div>
+          <div class="card-body center" style="height: 80%">
+            <h1 class="time" id="sunSet-time">5.20</h1>
+          </div>
+        </div>
+        <!-- card -->
+        <!-- card -->
+        <div class="card">
+          <div class="card-header">
+            <h1>العشاء</h1>
+          </div>
+          <div class="card-body center" style="height: 80%">
+            <h1 class="time" id="isha-time">5.20</h1>
+          </div>
+        </div>
+        <!-- card -->
+      </div>
+      <!-- prayer times -->
+
+      <!-- change city select -->
+      <div class="center" style="margin-top: 100px">
+        <select
+          name=""
+          id="cities-select"
+          style="
+            width: 300px;
+            height: 35px;
+            font-size: 20px;
+            font-family: Tajawal;
+            background: none;
+            color: white;
+            padding: 0px 5px;
+            background: #23055a;
+            border-radius: 20px;
+          "
+        ></select>
+      </div>
+      <!-- change city select -->
+    </div>
+  </body>
+  <script src="node_modules/axios/dist/axios.min.js"></script>
+  <script>
+    let cities = [
+      {
+        arabicName: "الرياض",
+        name: "Riyadh,SA",
+      },
+      {
+        arabicName: "مكةالمكرمة",
+        name: "Makkah al Mukarramah, SA",
+      },
+      {
+        arabicName: "الفيوم",
+        name: "Al Fayyūm,EG",
+      },
+      {
+        arabicName: "القاهرة",
+        name: "Al Qāhirah,EG",
+      },
+    ];
+
+    // let cities = ["الرياض", "مكة المكرمة", "الفيوم", "القاهرة"];
+    for (let city of cities) {
+      const content = `
+      <option>${city.arabicName}</option>
+      `;
+      document.getElementById("cities-select").innerHTML += content;
+    }
+    document
+      .getElementById("cities-select")
+      .addEventListener("change", function () {
+        let cityName = cities.find((city) => {
+          if (this.value == city.arabicName) {
+            getPrayersTimingsOfCity(city.name);
+            document.getElementById("cityName").innerHTML = this.value;
+          }
+        });
+
+        // if (this.value == "مكة المكرمة") {
+        //   getPrayersTimingsOfCity("Makkah al Mukarramah, SA");
+        //   document.getElementById("cityName").innerHTML = this.value;
+        // } else if (this.value == "الرياض") {
+        //   getPrayersTimingsOfCity("Riyadh,SA");
+        //   document.getElementById("cityName").innerHTML = this.value;
+        // } else if (this.value == "الفيوم") {
+        //   getPrayersTimingsOfCity("Al Fayyūm,EG");
+        //   document.getElementById("cityName").innerHTML = this.value;
+        // } else if (this.value == "القاهرة") {
+        //   getPrayersTimingsOfCity("Al Qāhirah,EG");
+        //   document.getElementById("cityName").innerHTML = this.value;
+        // }
+      });
+    getPrayersTimingsOfCity(cityName);
+    function getPrayersTimingsOfCity(addressName) {
+      let params = {
+        address: addressName,
+      };
+      axios
+        .get("https://api.aladhan.com/v1/timingsByAddress", {
+          params: params,
+        })
+        .then(function (response) {
+          const timings = response.data.data.timings;
+          fillTimeForPrayer("fajr-time", timings.Fajr);
+          fillTimeForPrayer("sunRise-time", timings.Sunrise);
+          fillTimeForPrayer("dhur-time", timings.Dhuhr);
+          fillTimeForPrayer("asr-time", timings.Asr);
+          fillTimeForPrayer("sunSet-time", timings.Sunset);
+          fillTimeForPrayer("isha-time", timings.Isha);
+
+          const readableDate = response.data.data.date.readable;
+          const weekDay = response.data.data.date.hijri.weekday.ar;
+          const date = weekDay + " " + readableDate;
+          document.getElementById("date").innerHTML = date;
+          console.log(response.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    function fillTimeForPrayer(id, time) {
+      document.getElementById(id).innerHTML = time;
+    }
+  </script>
+</html>
